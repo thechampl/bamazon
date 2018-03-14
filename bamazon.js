@@ -22,7 +22,8 @@ const questions = [
     {
         type:"confirm",
         message: "Would you like to buy another product?",
-        name: "buyAnother"
+        name: "buyAnother",
+        default: true
     }
 ]
 
@@ -68,16 +69,17 @@ var totalPurchase = userAmount * `${res[userChoice].price}`
 updateQuery(whereClause)
 console.log("Your Purchase was successful!")
 console.log("You spent $" + totalPurchase)})
-// inquirer.prompt(questions[2]).then(function(inquirerResponse){
-// if(inquirerResponse === "Yes"){
-// showProducts();
-// }
+inquirer.prompt(questions[2]).then(function(inquirerResponse){
+if(inquirerResponse === true){
+    console.log(inquirerResponse);
+showProducts();
+}
 
-// else if (inquirerResponse === "No"){
-//     console.log("See you next time!")
-//     connection.end();
-// }
-// });
+else{
+    console.log("See you next time!")
+    connection.end();
+}
+});
 
 
 });
