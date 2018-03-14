@@ -18,6 +18,11 @@ const questions = [
         type:"input",
         message: "How much would you like to buy?",
         name: "itemAmount"
+    },
+    {
+        type:"confirm",
+        message: "Would you like to buy another product?",
+        name: "buyAnother"
     }
 ]
 
@@ -34,22 +39,46 @@ function showProducts() {
       if (err) throw err;
       for (i=0; i < res.length; i++)
       console.log(`Item ID: ${res[i].item_id}, Product: ${res[i].product_name}, Department: ${res[i].department_name}, Price: $${res[i].price}, Stock ${res[i].stock_quanity}`);
-      connection.end();
+
       promptUser()
+   
     });
   }
+
+  function updateQuery(whereClause){
+      connection.query(whereClause, function(error,results,fields){
+          if (error) throw (error);
+          if (results.affectedRows > 0){
+              console.log("Updated")
+          }
+      })
+    }
 
 function promptUser(){
 
     inquirer.prompt(questions[0]).then(function(inquirerResponse){
-var userChoice = inquirerResponse.itemID;
+var userChoice = (inquirerResponse.itemID -1);
+
     inquirer.prompt(questions[1]).then(function(inquirerResponse){
 var userAmount = inquirerResponse.itemAmount
-whereClause = `UPDATE products SET stock_quanity =- '${userAmount}' WHERE item_id = '${userChoice}'`
-
+whereClause = `UPDATE products SET stock_quanity = stock_quanity - '${userAmount}' WHERE item_id = '${userChoice}'`
+connection.query("SELECT * FROM products", function(err, res) {
+    if(err) throw(err);
+var totalPurchase = userAmount * `${res[userChoice].price}`
 updateQuery(whereClause)
 console.log("Your Purchase was successful!")
-showProducts();
+console.log("You spent $" + totalPurchase)})
+// inquirer.prompt(questions[2]).then(function(inquirerResponse){
+// if(inquirerResponse === "Yes"){
+// showProducts();
+// }
+
+// else if (inquirerResponse === "No"){
+//     console.log("See you next time!")
+//     connection.end();
+// }
+// });
+
 
 });
 
