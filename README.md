@@ -21,7 +21,7 @@ The app should then prompt users with two messages.
 
 Once the customer has placed the order, the application should check if your store has enough of the product to meet the customer's request.
 
-  ##Screenshots
+## Screenshots
 
   ![Home](./demo1.png)
   ![Purchase](./demo2.png)
